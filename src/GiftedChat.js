@@ -139,7 +139,9 @@ class GiftedChat extends React.Component {
   setTextFromProp(textProp) {
     // Text prop takes precedence over state.
     if (textProp !== undefined && textProp !== this.state.text) {
-      this.setState({ text: textProp });
+      if (this._isMounted) {
+        this.setState({ text: textProp });
+      }
     }
   }
 
@@ -198,9 +200,11 @@ class GiftedChat extends React.Component {
   }
 
   setIsTypingDisabled(value, callback) {
-    this.setState({
-      typingDisabled: value,
-    }, callback);
+    if (this._isMounted) {
+      this.setState({
+        typingDisabled: value,
+      }, callback);
+    }
   }
 
   getIsTypingDisabled() {
@@ -257,9 +261,11 @@ class GiftedChat extends React.Component {
           duration: 210,
         }).start();
       } else {
-        this.setState({
-          messagesContainerHeight: newMessagesContainerHeight,
-        });
+        if (this._isMounted) {
+          this.setState({
+            messagesContainerHeight: newMessagesContainerHeight,
+          });
+        }
       }
     });
   }
@@ -275,9 +281,11 @@ class GiftedChat extends React.Component {
           duration: 210,
         }).start();
       } else {
-        this.setState({
-          messagesContainerHeight: newMessagesContainerHeight,
-        });
+        if (this._isMounted) {
+          this.setState({
+            messagesContainerHeight: newMessagesContainerHeight,
+          });
+        }
       }
     });
   }
@@ -360,11 +368,13 @@ class GiftedChat extends React.Component {
     this.notifyInputTextReset();
     const newComposerHeight = MIN_COMPOSER_HEIGHT;
     const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
-    this.setState({
-      text: this.getTextFromProp(''),
-      composerHeight: newComposerHeight,
-      messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
-    });
+    if (this._isMounted) {
+      this.setState({
+        text: this.getTextFromProp(''),
+        composerHeight: newComposerHeight,
+        messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
+      });
+    }
   }
 
   focusTextInput() {
@@ -381,10 +391,12 @@ class GiftedChat extends React.Component {
     const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(
       newComposerHeight,
     );
-    this.setState({
-      composerHeight: newComposerHeight,
-      messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
-    });
+    if (this._isMounted) {
+      this.setState({
+        composerHeight: newComposerHeight,
+        messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
+      });
+    }
   }
 
   onInputTextChanged(text) {
@@ -396,7 +408,9 @@ class GiftedChat extends React.Component {
     }
     // Only set state if it's not being overridden by a prop.
     if (this.props.text === undefined) {
-      this.setState({ text });
+      if (this._isMounted) {
+        this.setState({ text });
+      }
     }
   }
 
@@ -415,12 +429,14 @@ class GiftedChat extends React.Component {
     this.setMaxHeight(layout.height);
     const newComposerHeight = MIN_COMPOSER_HEIGHT;
     const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
-    this.setState({
-      isInitialized: true,
-      text: this.getTextFromProp(''),
-      composerHeight: newComposerHeight,
-      messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
-    });
+    if (this._isMounted) {
+      this.setState({
+        isInitialized: true,
+        text: this.getTextFromProp(''),
+        composerHeight: newComposerHeight,
+        messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
+      });
+    }
   }
 
   onMainViewLayout(e) {
@@ -428,9 +444,11 @@ class GiftedChat extends React.Component {
     const { layout } = e.nativeEvent;
     if (this.getMaxHeight() !== layout.height || this.getIsFirstLayout() === true) {
       this.setMaxHeight(layout.height);
-      this.setState({
-        messagesContainerHeight: this.prepareMessagesContainerHeight(this.getBasicMessagesContainerHeight()),
-      });
+      if (this._isMounted) {
+        this.setState({
+          messagesContainerHeight: this.prepareMessagesContainerHeight(this.getBasicMessagesContainerHeight()),
+        });
+      }
     }
     if (this.getIsFirstLayout() === true) {
       this.setIsFirstLayout(false);
